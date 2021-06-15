@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+  <script>
+    const id = "<%= id %>" ;
+  </script>
+  <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <title>Microsoft Teams Clone</title>
+</head>
+
+<body>
+    <div>
+    </div>
+    <div id="video-grid">
+    </div>
+  <nav class="fixed-bottom navbar-light bg-light main-buttons">
+    <button type="button" name="button" class="btn col-1 muteBtn" >Mute</button>
+    <button type="button" name="button" class="btn col-1 closeCam" >Camera</button>
+    <button type="button" name="button" class="btn col-1">End</button>
+  </nav>
+  <script type="text/javascript" src="script.js"></script>
+</body>
+
+</html>
