@@ -8,6 +8,9 @@ const app = express();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+const { PeerServer } = require('peer');
+
+const peerServer = PeerServer({ port: 443, path: '/' });
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
