@@ -1,9 +1,9 @@
 const socket = io('/');
 const videoGrid = document.getElementById("video-grid");
 const peer = new Peer(undefined, {
-  secure: true,
   host: "warm-shelf-32519.herokuapp.com",
-  port: '9000',
+  secure: true,
+  port: 443,
   debug: 1
 });
 
