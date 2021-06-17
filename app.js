@@ -27,13 +27,32 @@ app.use(express.static("public"));
 app.use("/peerjs",peerServer);
 
 app.get("/", (req,res)=>{
+  res.render("home");
+})
+
+app.post("/joiningNewMeeting", (req,res) => {
   let id = uuidv4();
   res.redirect("/" + id);
 })
 
+app.post("/joiningMeeting", (req,res) => {
+  res.redirect("/" + req.body.link);
+})
+
 app.get("/:id", (req,res)=>{
   const id = req.params.id;
+  if(id == "meetingEnd"){
+    res.render("callEnded", { id : req.body.meetingId });
+  }
   res.render("videocall", { id : id });
+})
+
+app.post("/meetingEnd", (req,res) => {
+  res.render("callEnded",{ id : req.body.meetingId });
+})
+
+app.post("/rejoin", (req,res) => {
+  res.redirect("/" + req.body.meetingId);
 })
 
 io.on('connection', (socket) => {

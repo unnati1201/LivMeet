@@ -11,13 +11,14 @@ const peer = new Peer(undefined, {
 
 const myVideo = document.createElement("video");
 myVideo.muted = true;
-let thisVideo;
+let myStream;
 const peers = {}
+
 navigator.mediaDevices.getUserMedia({
   video: true,
   audio: true
 }).then((stream) => {
-  thisVideo = stream;
+  myStream = stream;
   addVideo(myVideo, stream);
 
   peer.on('call', function(call) {
@@ -56,6 +57,7 @@ function connectToNewUser(userId, stream) {
   peers[userId] = call
 }
 
+// add video
 const addVideo = (video, stream) => {
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", ()=>{
@@ -64,22 +66,66 @@ const addVideo = (video, stream) => {
   videoGrid.append(video);
 }
 
-document.querySelector(".muteBtn").onclick = function(evt) {
-  const tracks = thisVideo.getAudioTracks()
+//remove video
+const removeVideo = (video, stream) => {
+  video.remove();
+}
+
+// mute button functionality
+document.querySelector(".muteBtn").onclick = () => {
+  const tracks = myStream.getAudioTracks()
   if(tracks[0].enabled == true){
     tracks[0].enabled = false;
+    document.querySelector(".micIcon").innerHTML = "mic_off";
   }else{
     tracks[0].enabled = true;
+    document.querySelector(".micIcon").innerHTML = "mic";
   }
 }
 
-document.querySelector(".closeCam").onclick = function(evt) {
-  const tracks = thisVideo.getVideoTracks()
+// camera button functionality
+document.querySelector(".closeCam").onclick = () => {
+  const tracks = myStream.getVideoTracks()
   if(tracks[0].enabled == true){
-    console.log("hgjhgbkj")
     tracks[0].enabled = false;
+    document.querySelector(".videoBtn").innerHTML = "videocam_off";
   }else{
-    console.log("hgkj")
     tracks[0].enabled = true;
+    document.querySelector(".videoBtn").innerHTML = "videocam";
   }
+}
+
+// end button functionality
+document.querySelector(".end").onclick = () => {
+  removeVideo(myVideo,myStream)
+}
+
+// share button functionality
+document.querySelector(".shareBtn").onclick = () => {
+  document.querySelector(".invite").style.display = "block";
+}
+
+// copy link
+document.querySelector(".copyBtn").onclick = () => {
+  const cl = document.createElement('textarea');
+  cl.value = id;
+  cl.setAttribute('readonly', '');
+  cl.style.position = 'absolute';
+  cl.style.left = '-9999px';
+  document.body.appendChild(cl);
+  cl.select();
+  document.execCommand('copy');
+  document.body.removeChild(cl);
+}
+
+//share
+document.querySelector(".shareEmailBtn").onclick = () => {
+  var emailID = document.querySelector("#emailID").value;
+  var link = "mailto:" + emailID + "?subject=Meeting Link&body=The link to the site is " + "http://localhost:3000/"+id;
+  document.querySelector("#emailShare").href = link;
+}
+
+//close share
+document.querySelector(".closeShare").onclick = () => {
+  document.querySelector(".invite").style.display = "none";
 }

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/callEnded.css" />
+    <title>Microsoft Teams Clone</title>
+  </head>
+  <body>
+    <div class="card text-center meetEndCard" style="width: 20rem;">
+      <div class="card-header">
+        <br>
+        <h5 class="card-title">Meeting Ended</h5>
+        <br>
+        <p class="card-text">To rejoin</p>
+        <form class="" action="/rejoin" method="post">
+          <input type="text" name="meetingId" value="<%= id %>" style="display: none">
+          <button type="submit" name="rejoin" class="btn btn-primary">   Rejoin   </button>
+        </form>
+        <br>
+      </div>
+    </div>
+  </body>
+</html>

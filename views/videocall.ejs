@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <!-- CSS only -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" type="text/css" href="/css/styles.css" />
   <script>
     const id = "<%= id %>" ;
@@ -15,14 +16,45 @@
 </head>
 
 <body>
-    <div>
+
+    <div id="video-grid"></div>
+
+    <div class="card invite" style="width: 20rem">
+
+      <div class="card-body">
+        <span class="material-icons closeShare">close</span>
+        <p class="card-text">Share Link</p>
+        <br>
+        <button type="button" class="btn btn-dark copyBtn">Copy Link</button>
+        <input type="email" name="" value="" id="emailID" class="form-control" placeholder="Enter Email ID">
+        <a title="Share by Email" id="emailShare" target="_blank">
+          <button type="button" name="button" class="btn btn-dark shareEmailBtn">Share via Email</button>
+        </a>
+      </div>
+
     </div>
-    <div id="video-grid">
-    </div>
-  <nav class="fixed-bottom navbar-light bg-light main-buttons">
-    <button type="button" name="button" class="btn col-1 muteBtn" >Mute</button>
-    <button type="button" name="button" class="btn col-1 closeCam" >Camera</button>
-    <button type="button" name="button" class="btn col-1">End</button>
+
+  <nav class="fixed-bottom main-buttons">
+
+    <button type="button" name="button" class="btn col-1 shareBtn" >
+      <span class="material-icons shareBtn">share</span>
+    </button>
+
+    <button type="button" name="button" class="btn col-1 muteBtn" >
+      <span class="material-icons micIcon">mic</span>
+    </button>
+
+    <button type="button" name="button" class="btn col-1 closeCam" >
+      <span class="material-icons videoBtn">videocam</span>
+    </button>
+
+    <form class="" action="/meetingEnd" method="post">
+      <input type="text" name="meetingId" value="<%= id %>" style="display: none">
+      <button name="button" type="submit" class="btn col-1">
+        <span class="material-icons end">call_end</span>
+      </button>
+    </form>
+
   </nav>
   <script type="text/javascript" src="script.js"></script>
 </body>
