@@ -1,5 +1,6 @@
 body{
   background-color: #000;
+  height: 100%;
 }
 
 nav{
@@ -31,11 +32,23 @@ nav .btn{
   justify-content: center;
   align-items: center;
 }
+
 video {
   display: flex;
+  width: 50%;
+  height: 50%;
 }
 
 .invite {
+  position: absolute;
+  display: none;
+  left: 50%;
+  bottom: 50%;
+  transform: translate(-50%,-10%);
+  text-align: center;
+}
+
+.screenShare {
   position: absolute;
   display: none;
   left: 50%;

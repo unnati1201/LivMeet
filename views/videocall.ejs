@@ -17,7 +17,7 @@
 
 <body>
 
-    <div id="video-grid"></div>
+    <div id="video-grid" class=""></div>
 
     <div class="card invite" style="width: 20rem">
 
@@ -34,6 +34,17 @@
 
     </div>
 
+    <div class="card screenShare" style="width: 20rem">
+
+      <div class="card-body">
+        <p class="card-text">Do you want to share your screen?</p>
+        <br>
+        <button type="button" class="btn btn-dark yesShare">Yes</button>
+        <button type="button" class="btn btn-dark noShare">No</button>
+      </div>
+
+    </div>
+
   <nav class="fixed-bottom main-buttons">
 
     <button type="button" name="button" class="btn col-1 shareBtn" >
@@ -44,16 +55,20 @@
       <span class="material-icons micIcon">mic</span>
     </button>
 
-    <button type="button" name="button" class="btn col-1 closeCam" >
-      <span class="material-icons videoBtn">videocam</span>
-    </button>
-
     <form class="" action="/meetingEnd" method="post">
       <input type="text" name="meetingId" value="<%= id %>" style="display: none">
       <button name="button" type="submit" class="btn col-1">
         <span class="material-icons end">call_end</span>
       </button>
     </form>
+
+    <button type="button" name="button" class="btn col-1 closeCam" >
+      <span class="material-icons videoBtn">videocam</span>
+    </button>
+
+    <button type="button" name="button" class="btn col-1 shareScreen" >
+      <span class="material-icons">screen_share</span>
+    </button>
 
   </nav>
   <script type="text/javascript" src="script.js"></script>

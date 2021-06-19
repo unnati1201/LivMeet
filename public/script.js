@@ -13,6 +13,7 @@ const myVideo = document.createElement("video");
 myVideo.muted = true;
 let myStream;
 const peers = {}
+var currentPeer;
 
 navigator.mediaDevices.getUserMedia({
   video: true,
@@ -26,6 +27,7 @@ navigator.mediaDevices.getUserMedia({
       const video = document.createElement("video");
       call.on('stream', function(remoteStream) {
         addVideo(video, remoteStream);
+        currentPeer = call.peerConnection;
       });
   });
 
@@ -49,6 +51,7 @@ function connectToNewUser(userId, stream) {
   const video = document.createElement("video");
   call.on('stream', function(remoteStream) {
     addVideo(video, remoteStream);
+    currentPeer = call.peerConnection;
   });
   call.on('close', () => {
     video.remove()
@@ -64,6 +67,7 @@ const addVideo = (video, stream) => {
     video.play();
   })
   videoGrid.append(video);
+  //document.querySelector("video").className = "col";
 }
 
 //remove video
@@ -97,7 +101,8 @@ document.querySelector(".closeCam").onclick = () => {
 
 // end button functionality
 document.querySelector(".end").onclick = () => {
-  removeVideo(myVideo,myStream)
+  removeVideo(myVideo,myStream);
+  socket.disconnect();
 }
 
 // share button functionality
@@ -129,3 +134,39 @@ document.querySelector(".shareEmailBtn").onclick = () => {
 document.querySelector(".closeShare").onclick = () => {
   document.querySelector(".invite").style.display = "none";
 }
+
+//share screen
+document.querySelector(".shareScreen").onclick = () => {
+  document.querySelector(".screenShare").style.display = "block";
+  document.querySelector(".noShare").onclick = () => {
+    document.querySelector(".screenShare").style.display = "none";
+  }
+  document.querySelector(".yesShare").onclick = () => {
+    navigator.mediaDevices.getDisplayMedia({
+      video: {
+        cursor: 'always'
+      },
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true
+      }
+    }).then(stream => {
+      const videoTrack = stream.getVideoTracks()[0];
+      videoTrack.onended = () => {
+        stopScreenShare();
+      };
+
+      const sender = currentPeer.getSenders().find(s => s.track.kind === videoTrack.kind);
+      sender.replaceTrack(videoTrack);
+    }).catch(err => {
+      console.log('Unable to get display media ' + err);
+    });
+    document.querySelector(".screenShare").style.display = "none";
+  }
+}
+
+const stopScreenShare = () => {
+    const videoTrack = myStream.getVideoTracks()[0];
+    const sender = currentPeer.getSenders().find(s => s.track.kind === videoTrack.kind);
+    sender.replaceTrack(videoTrack);
+  }

@@ -60,6 +60,7 @@ io.on('connection', (socket) => {
     socket.join(id);
     socket.broadcast.to(id).emit('user-connected', userId)
     socket.on('disconnect', () => {
+      socket.leave(id);
       socket.broadcast.to(id).emit('user-disconnected', userId)
     })
   })
