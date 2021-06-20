@@ -39,14 +39,6 @@ app.post("/joiningMeeting", (req,res) => {
   res.redirect("/" + req.body.link);
 })
 
-app.get("/:id", (req,res)=>{
-  const id = req.params.id;
-  if(id == "meetingEnd"){
-    res.render("callEnded", { id : req.body.meetingId });
-  }
-  res.render("videocall", { id : id });
-})
-
 app.post("/meetingEnd", (req,res) => {
   res.render("callEnded",{ id : req.body.meetingId });
 })
@@ -55,14 +47,27 @@ app.post("/rejoin", (req,res) => {
   res.redirect("/" + req.body.meetingId);
 })
 
+app.get("/meetingFull", (req,res) => {
+  res.render("meetingFull");
+})
+
+app.get("/:id", (req,res)=>{
+  const id = req.params.id;
+  res.render("videocall", { id : id });
+})
+
 io.on('connection', (socket) => {
   socket.on('join-room', (id,userId)=>{
-    socket.join(id);
-    socket.broadcast.to(id).emit('user-connected', userId)
-    socket.on('disconnect', () => {
-      socket.leave(id);
-      socket.broadcast.to(id).emit('user-disconnected', userId)
-    })
+    if( socket.client.conn.server.clientsCount > 9){
+      socket.emit("redirect","/meetingFull");
+    }else{
+      socket.join(id);
+      socket.broadcast.to(id).emit('user-connected', userId)
+      socket.on('disconnect', () => {
+        socket.leave(id);
+        socket.broadcast.to(id).emit('user-disconnected', userId);
+      })
+    }
   })
 });
 

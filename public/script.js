@@ -20,6 +20,7 @@ navigator.mediaDevices.getUserMedia({
   audio: true
 }).then((stream) => {
   myStream = stream;
+  myVideo.className = "local-video";
   addVideo(myVideo, stream);
 
   peer.on('call', function(call) {
@@ -42,22 +43,26 @@ socket.on('user-disconnected', userId => {
   if (peers[userId]) peers[userId].close()
 })
 
+socket.on('redirect', function(destination) {
+    window.location.href = destination;
+});
+
 peer.on("open",(userId)=>{
   socket.emit("join-room",id,userId);
 })
 
 function connectToNewUser(userId, stream) {
-  const call = peer.call(userId, stream);
-  const video = document.createElement("video");
-  call.on('stream', function(remoteStream) {
-    addVideo(video, remoteStream);
-    currentPeer = call.peerConnection;
-  });
-  call.on('close', () => {
-    video.remove()
-  })
+    const call = peer.call(userId, stream);
+    const video = document.createElement("video");
+    call.on('stream', function(remoteStream) {
+      addVideo(video, remoteStream);
+      currentPeer = call.peerConnection;
+    });
+    call.on('close', () => {
+      video.remove()
+    })
 
-  peers[userId] = call
+    peers[userId] = call
 }
 
 // add video
@@ -66,8 +71,36 @@ const addVideo = (video, stream) => {
   video.addEventListener("loadedmetadata", ()=>{
     video.play();
   })
-  videoGrid.append(video);
-  //document.querySelector("video").className = "col";
+  if(video.classList.contains("local-video")){
+      document.querySelector("#other-video").append(video);
+  }
+  else{
+    videoGrid.append(video);
+    adjustVideo(video);
+  }
+}
+
+// adjust videos
+const adjustVideo = (video) => {
+  video.className = "remote-video";
+  var numOfVideo = document.querySelectorAll('.remote-video').length;
+  if(numOfVideo <= 1){
+    videoGrid.className = "one-video";
+  }
+  else if(numOfVideo <= 2){
+    videoGrid.classList.remove("one-video");
+    for(i=0; i<numOfVideo; i++){
+        document.getElementsByClassName("remote-video")[i].className = "remote-video col-6";
+    }
+  }else if(numOfVideo <= 6){
+    for(i=0; i<numOfVideo; i++){
+        document.getElementsByClassName("remote-video")[i].className = "remote-video col-4";
+    }
+  }else if(numOfVideo <= 8){
+    for(i=0; i<numOfVideo; i++){
+        document.getElementsByClassName("remote-video")[i].className = "remote-video col-3";
+    }
+  }
 }
 
 //remove video
@@ -102,6 +135,7 @@ document.querySelector(".closeCam").onclick = () => {
 // end button functionality
 document.querySelector(".end").onclick = () => {
   removeVideo(myVideo,myStream);
+  adjustVideo(myVideo);
   socket.disconnect();
 }
 
@@ -157,6 +191,7 @@ document.querySelector(".shareScreen").onclick = () => {
       };
 
       const sender = currentPeer.getSenders().find(s => s.track.kind === videoTrack.kind);
+
       sender.replaceTrack(videoTrack);
     }).catch(err => {
       console.log('Unable to get display media ' + err);
