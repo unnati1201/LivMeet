@@ -96,3 +96,31 @@ nav .btn{
   border-top-right-radius: 0;
   border-top-left-radius: 0;
 }
+
+/* Chat Box */
+.message-container {
+  position: absolute;
+  left: 50%;
+  bottom: 30%;
+  transform: translate(-50%);
+  height: 20rem;
+}
+
+.chat-messages {
+  position: relative;
+  height: 12rem;
+  overflow-y: auto;
+}
+
+.send-container {
+  position: fixed;
+  width: 90%;
+  padding-bottom: 2px;
+  bottom: 0;
+  display: flex;
+}
+
+.closeChat {
+  float: right;
+  cursor: pointer;
+}

@@ -44,20 +44,30 @@
       <div style="margin: auto">
         <p class="lead">Join a Meeting</p>
         <div>
-          <form class="" action="/joiningMeeting" method="post">
+          <form class="form1" action="/joiningMeeting" method="post">
             <div class="input-group mb-3">
               <input type="text" class="form-control" placeholder="Enter Meeting ID" name="link">
-              <button class="input-group-text" id="basic-addon1">Join</button>
+              <input type="text" value="" style="display: none" class="newMeetingName">
+              <button class="input-group-text" id="basic-addon1" type="submit">Join</button>
             </div>
           </form>
         </div>
       </div>
       <div style="margin: auto">
         <p class="lead">
-          <form class="" action="/joiningNewMeeting" method="post">
+          <form class="form2" action="/joiningNewMeeting" method="post">
+            <input type="text" value="" style="display: none" class="meetingName">
             <button type="submit" class="btn btn-lg btn-secondary fw-bold border-white">Schedule a Meeting</button>
           </form>
         </p>
+      </div>
+    </div>
+
+    <div class="card" style="width: 20rem; display: none">
+      <h5 class="card-header">Join Meeting</h5>
+      <div class="card-body">
+        <input type="text" placeholder="Enter your name" class="form-control nameTag">
+        <button type="button" name="button"></button>
       </div>
     </div>
 
@@ -68,6 +78,36 @@
   </footer>
 </div>
 
+
+<!-- <script type="text/javascript">
+
+      document.querySelector(".btn").onclick = (e) => {
+      e.preventDefault();
+      document.querySelector(".card").style.display = "block";
+      document.querySelector(".card-body button").onclick = () => {
+        var x = document.querySelector(".card-body .nameTag").value;
+        document.querySelector(".newMeetingName").value = x;
+        if(x.trim()){
+          document.querySelector(".form2").submit();
+          e.returnValue = true;
+        }
+      }
+    }
+
+      document.querySelector("#basic-addon1").onclick = (e) => {
+      e.preventDefault();
+      document.querySelector(".card").style.display = "block";
+      document.querySelector(".card-body button").onclick = () => {
+        var x = document.querySelector(".card-body .nameTag").value;
+        document.querySelector(".meetingName").value = x;
+        if(x.trim()){
+          document.querySelector(".form1").submit();
+          e.returnValue = true;
+        }
+      }
+    }
+
+</script> -->
 
 
   </body>

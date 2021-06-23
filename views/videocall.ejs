@@ -6,6 +6,8 @@
   <!-- CSS only -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
   <link rel="stylesheet" type="text/css" href="/css/styles.css" />
   <script>
     const id = "<%= id %>" ;
@@ -18,8 +20,12 @@
 <body>
     <div class="screenShareDiv" style="display: none"></div>
     <div id="video-grid" class=""></div>
-    <div id="other-video"></div>
 
+    <div id="other-video">
+
+    </div>
+
+    <!-- share link popup box -->
     <div class="card invite" style="width: 20rem">
 
       <div class="card-body">
@@ -35,6 +41,7 @@
 
     </div>
 
+    <!-- share screen popup box -->
     <div class="card screenShare" style="width: 20rem">
 
       <div class="card-body">
@@ -45,6 +52,24 @@
       </div>
 
     </div>
+
+  <!-- chatbox popup box -->
+
+  <div class="card message-container" style="width: 20rem; display: none">
+    <div class="card-header">
+      <h5 class="card-title" style="display: inline">Chat</h5>
+      <span class="material-icons closeChat">close</span>
+    </div>
+    <div class="card-body">
+      <div class="chat-messages"></div>
+      <form class="chat-form" action="index.html" method="post">
+      <div class="input-group mb-3 input-group-sm send-container">
+        <input type="text" class="form-control message-input" placeholder="Message" aria-label="Recipient's username" aria-describedby="basic-addon2">
+          <button type="submit" name="sendMessage" class="btn btn-primary"><span class="material-icons">send</span></button>
+      </div>
+      </form>
+    </div>
+  </div>
 
   <nav class="fixed-bottom main-buttons">
 
@@ -71,8 +96,13 @@
       <span class="material-icons">screen_share</span>
     </button>
 
+    <button type="button" name="button" class="btn col-1 chatBtn" >
+      <span class="material-icons">chat_bubble</span>
+    </button>
+
   </nav>
   <script type="text/javascript" src="script.js"></script>
+  <script type="text/javascript" src="backgroundChange.js"></script>
 </body>
 
 </html>

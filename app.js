@@ -56,16 +56,25 @@ app.get("/:id", (req,res)=>{
   res.render("videocall", { id : id });
 })
 
+const users = {}
+
 io.on('connection', (socket) => {
+  socket.on('new-user', name => {
+    users[socket.id] = name
+  })
   socket.on('join-room', (id,userId)=>{
     if( socket.client.conn.server.clientsCount > 9){
       socket.emit("redirect","/meetingFull");
     }else{
       socket.join(id);
       socket.broadcast.to(id).emit('user-connected', userId)
+      socket.on("send-chat-message", message => {
+        socket.broadcast.emit("chat-message",{ message: message, name: users[socket.id]});
+      })
       socket.on('disconnect', () => {
         socket.leave(id);
         socket.broadcast.to(id).emit('user-disconnected', userId);
+        delete users[socket.id]
       })
     }
   })

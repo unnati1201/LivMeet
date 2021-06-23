@@ -14,6 +14,7 @@ myVideo.muted = true;
 let myStream;
 const peers = {}
 var currentPeer;
+const name = prompt("Enter your name");;
 
 navigator.mediaDevices.getUserMedia({
   video: true,
@@ -31,6 +32,8 @@ navigator.mediaDevices.getUserMedia({
         currentPeer = call.peerConnection;
       });
   });
+
+  socket.emit('new-user', name)
 
   socket.on('user-connected', userId => {
     setTimeout(() => {
@@ -205,3 +208,40 @@ const stopScreenShare = () => {
     const sender = currentPeer.getSenders().find(s => s.track.kind === videoTrack.kind);
     sender.replaceTrack(videoTrack);
   }
+
+//chatbox
+document.querySelector(".chatBtn").onclick = () => {
+  document.querySelector(".message-container").style.display = "block";
+}
+document.querySelector(".closeChat").onclick = () => {
+  document.querySelector(".message-container").style.display = "none";
+}
+
+socket.on('chat-message', data => {
+  addMessage(`${data.message}`, `${data.name}`);
+})
+
+const messageInput = document.querySelector(".message-input");
+const chatMessages = document.querySelector(".chat-messages");
+
+document.querySelector(".chat-form").addEventListener("submit", e => {
+  e.preventDefault();
+  const message = messageInput.value;
+  if(message != ''){
+    socket.emit("send-chat-message", message)
+    messageInput.value = '';
+    addMessage(message, "You")
+  }
+})
+
+function addMessage(message, name) {
+  const messageElement = document.createElement("div")
+  const nameElement = document.createElement("p");
+  nameElement.className = "fw-light";
+  nameElement.innerHTML = name;
+  const text = document.createElement("h6");
+  text.innerHTML = message;
+  messageElement.append(name);
+  messageElement.append(text);
+  chatMessages.append(messageElement);
+}
