@@ -14,6 +14,7 @@ myVideo.muted = true;
 let myStream;
 const peers = {}
 var currentPeer;
+var userList;
 const name = prompt("Enter your name");;
 
 navigator.mediaDevices.getUserMedia({
@@ -25,8 +26,12 @@ navigator.mediaDevices.getUserMedia({
   addVideo(myVideo, stream);
 
   peer.on('call', function(call) {
+    console.log(call);
       call.answer(stream);
       const video = document.createElement("video");
+      const input = document.createElement("h1");
+      input.innerHTML = call.peer;
+      video.append(input);
       call.on('stream', function(remoteStream) {
         addVideo(video, remoteStream);
         currentPeer = call.peerConnection;
@@ -35,11 +40,17 @@ navigator.mediaDevices.getUserMedia({
 
   socket.emit('new-user', name)
 
+  socket.on('participants', users => {
+    userList = users;
+    addParticipants(users);
+  })
+
   socket.on('user-connected', userId => {
     setTimeout(() => {
       connectToNewUser(userId, stream)
     }, 1000)
   })
+
 })
 
 socket.on('user-disconnected', userId => {
@@ -55,17 +66,24 @@ peer.on("open",(userId)=>{
 })
 
 function connectToNewUser(userId, stream) {
+    console.log("called1");
     const call = peer.call(userId, stream);
-    const video = document.createElement("video");
-    call.on('stream', function(remoteStream) {
-      addVideo(video, remoteStream);
-      currentPeer = call.peerConnection;
-    });
-    call.on('close', () => {
-      video.remove()
-    })
 
-    peers[userId] = call
+      const video = document.createElement("video");
+        const input = document.createElement("h1");
+        input.innerHTML = userId;
+        video.append(input);
+      call.on('stream', function(remoteStream) {
+        addVideo(video, remoteStream, peer.id);
+        currentPeer = call.peerConnection;
+      });
+
+      call.on('close', () => {
+        video.remove()
+      })
+
+      peers[userId] = call
+
 }
 
 // add video
@@ -113,25 +131,35 @@ const removeVideo = (video, stream) => {
 
 // mute button functionality
 document.querySelector(".muteBtn").onclick = () => {
-  const tracks = myStream.getAudioTracks()
+  const tracks = myStream.getAudioTracks();
+  var mic = document.querySelector(".muteBtn");
   if(tracks[0].enabled == true){
     tracks[0].enabled = false;
     document.querySelector(".micIcon").innerHTML = "mic_off";
+    mic.style.backgroundColor = "#DA0037";
+    mic.style.color = "#fff";
   }else{
     tracks[0].enabled = true;
     document.querySelector(".micIcon").innerHTML = "mic";
+    mic.style.backgroundColor = "#fff";
+    mic.style.color = "#000";
   }
 }
 
 // camera button functionality
 document.querySelector(".closeCam").onclick = () => {
   const tracks = myStream.getVideoTracks()
+  var cam = document.querySelector(".closeCam");
   if(tracks[0].enabled == true){
     tracks[0].enabled = false;
     document.querySelector(".videoBtn").innerHTML = "videocam_off";
+    cam.style.backgroundColor = "#DA0037";
+    cam.style.color = "#fff";
   }else{
     tracks[0].enabled = true;
     document.querySelector(".videoBtn").innerHTML = "videocam";
+    cam.style.backgroundColor = "#fff";
+    cam.style.color = "#000";
   }
 }
 
@@ -140,6 +168,56 @@ document.querySelector(".end").onclick = () => {
   removeVideo(myVideo,myStream);
   adjustVideo(myVideo);
   socket.disconnect();
+}
+
+//raiseHand
+socket.on("person-raised-hand", userId => {
+  var videos = document.querySelectorAll('#video-grid video');
+  for(var i=0; i<videos.length; i++) {
+    const x = videos[i].querySelector("h1").innerHTML;
+    console.log(x);
+    if(x == userId){
+      videos[i].style.border = "2px solid yellow"
+    }
+  }
+})
+
+socket.on("person-down-hand", userId => {
+  var videos = document.querySelectorAll('#video-grid video');
+  for(var i=0; i<videos.length; i++) {
+    const x = videos[i].querySelector("h1").innerHTML;
+    console.log(x);
+    if(x == userId){
+      videos[i].style.border = "none"
+    }
+  }
+})
+
+document.querySelector(".raiseHand").onclick = () => {
+  var x = document.querySelector(".raiseHand input");
+  if(x.value == "off"){
+    socket.emit('hand-raise', peer.id);
+     document.querySelector(".raiseHand").style.backgroundColor = "yellow"
+    x.value = "on";
+  }else{
+    x.value = "off"
+    socket.emit('hand-down', peer.id);
+    document.querySelector(".raiseHand").style.backgroundColor = "#fff"
+  }
+}
+
+function raisedHand(userId, stream) {
+    const call = peer.call(userId, stream);
+    const video = document.createElement("video");
+    call.on('stream', function(remoteStream) {
+      addVideo(video, remoteStream);
+      currentPeer = call.peerConnection;
+    });
+    call.on('close', () => {
+      video.remove()
+    })
+
+    peers[userId] = call
 }
 
 // share button functionality
@@ -208,6 +286,31 @@ const stopScreenShare = () => {
     const sender = currentPeer.getSenders().find(s => s.track.kind === videoTrack.kind);
     sender.replaceTrack(videoTrack);
   }
+
+//participantsList
+
+function addParticipants(users){
+  const content = document.querySelector(".participants-content");
+  while(content.firstChild){
+      content.removeChild(content.firstChild);
+  }
+  for (var i in users) {
+    const div = document.createElement("div");
+    const user = document.createElement("li");
+    user.innerHTML = users[i];
+    user.className = "list-group-item";
+    div.append(user);
+    content.append(div);
+  }
+}
+
+document.querySelector(".participants").onclick = () => {
+  document.querySelector(".participants-element").style.display = "block";
+}
+
+document.querySelector(".closeList").onclick = () => {
+  document.querySelector(".participants-element").style.display = "none";
+}
 
 //chatbox
 document.querySelector(".chatBtn").onclick = () => {

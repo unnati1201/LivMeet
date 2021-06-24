@@ -19,11 +19,10 @@
 
 <body>
     <div class="screenShareDiv" style="display: none"></div>
+
     <div id="video-grid" class=""></div>
 
-    <div id="other-video">
-
-    </div>
+    <div id="other-video"></div>
 
     <!-- share link popup box -->
     <div class="card invite" style="width: 20rem">
@@ -32,7 +31,7 @@
         <span class="material-icons closeShare">close</span>
         <p class="card-text">Share Link</p>
         <br>
-        <button type="button" class="btn btn-dark copyBtn">Copy Link</button>
+        <button type="button" class="btn btn-dark copyBtn">Copy Meeting ID</button>
         <input type="email" name="" value="" id="emailID" class="form-control" placeholder="Enter Email ID">
         <a title="Share by Email" id="emailShare" target="_blank">
           <button type="button" name="button" class="btn btn-dark shareEmailBtn">Share via Email</button>
@@ -71,10 +70,23 @@
     </div>
   </div>
 
+  <!-- participants list -->
+
+  <div class="card participants-element message-container" style="width: 20rem; display: none">
+    <div class="card-header">
+      <h5 class="card-title" style="display: inline">Participants</h5>
+      <span class="material-icons closeList">close</span>
+    </div>
+    <div class="card-body participants-content chat-messages" style="height: 15rem">
+    </div>
+  </div>
+
+
   <nav class="fixed-bottom main-buttons">
 
-    <button type="button" name="button" class="btn col-1 shareBtn" >
-      <span class="material-icons shareBtn">share</span>
+    <button type="button" name="button" class="btn col-1 raiseHand" >
+      <input type="text" name="" value="off" style="display: none">
+      <span class="material-icons">back_hand</span>
     </button>
 
     <button type="button" name="button" class="btn col-1 muteBtn" >
@@ -92,13 +104,15 @@
       <span class="material-icons videoBtn">videocam</span>
     </button>
 
-    <button type="button" name="button" class="btn col-1 shareScreen" >
-      <span class="material-icons">screen_share</span>
-    </button>
-
-    <button type="button" name="button" class="btn col-1 chatBtn" >
-      <span class="material-icons">chat_bubble</span>
-    </button>
+    <div class="dropup" >
+      <button class="btn"><span class="material-icons">more_vert</span></button>
+      <div class="dropup-content">
+        <a type="button" class="shareScreen">Share Screen</a>
+        <a type="button" class="participants">Participants</a>
+        <a type="button" class="chatBtn">Chat</a>
+        <a type="button" class="shareBtn">Share Link</a>
+      </div>
+    </div>
 
   </nav>
   <script type="text/javascript" src="script.js"></script>

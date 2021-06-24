@@ -67,10 +67,27 @@ io.on('connection', (socket) => {
       socket.emit("redirect","/meetingFull");
     }else{
       socket.join(id);
+      //user-connected
       socket.broadcast.to(id).emit('user-connected', userId)
+
+      //participants
+      socket.emit("participants", users);
+      socket.broadcast.to(id).emit("participants", users);
+
+      //hand-raise
+      socket.on("hand-raise", userId => {
+        socket.broadcast.emit("person-raised-hand", userId );
+      });
+      socket.on("hand-down", userId => {
+        socket.broadcast.emit("person-down-hand", userId );
+      });
+
+      //chat
       socket.on("send-chat-message", message => {
         socket.broadcast.emit("chat-message",{ message: message, name: users[socket.id]});
       })
+
+      //user-disconnected
       socket.on('disconnect', () => {
         socket.leave(id);
         socket.broadcast.to(id).emit('user-disconnected', userId);
