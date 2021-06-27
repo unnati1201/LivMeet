@@ -5,6 +5,7 @@ body{
 
 nav{
   background-color: #000;
+  display: block;
 }
 
 .main-buttons{

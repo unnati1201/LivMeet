@@ -87,11 +87,19 @@ io.on('connection', (socket) => {
         socket.broadcast.emit("chat-message",{ message: message, name: users[socket.id]});
       })
 
+      //speech detecte
+      socket.on("voice-detected", userId => {
+        socket.broadcast.emit("voice-received",userId);
+      })
+      socket.on("voice-notDetect", userId => {
+        socket.broadcast.emit("voice-notReceived",userId);
+      })
+
       //user-disconnected
       socket.on('disconnect', () => {
         socket.leave(id);
-        socket.broadcast.to(id).emit('user-disconnected', userId);
         delete users[socket.id]
+        socket.broadcast.to(id).emit('user-disconnected', userId);
       })
     }
   })

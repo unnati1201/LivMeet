@@ -17,7 +17,7 @@
   <title>Microsoft Teams Clone</title>
 </head>
 
-<body>
+<body onload="deleteAllCookies()">
     <div class="screenShareDiv" style="display: none"></div>
 
     <div id="video-grid" class=""></div>
@@ -115,8 +115,21 @@
     </div>
 
   </nav>
+  <script type="text/javascript">
+  function deleteAllCookies() {
+    console.log("fhgbh");
+  var cookies = document.cookie.split(";");
+
+  for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i];
+      var eqPos = cookie.indexOf("=");
+      var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+  }
+}
+  </script>
   <script type="text/javascript" src="script.js"></script>
-  <script type="text/javascript" src="backgroundChange.js"></script>
+  <script type="text/javascript" src="speechDetect.js"></script>
 </body>
 
 </html>

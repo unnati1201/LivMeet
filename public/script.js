@@ -13,7 +13,7 @@ const myVideo = document.createElement("video");
 myVideo.muted = true;
 let myStream;
 const peers = {}
-var currentPeer;
+var currentPeer = [];
 var userList;
 const name = prompt("Enter your name");;
 
@@ -26,7 +26,6 @@ navigator.mediaDevices.getUserMedia({
   addVideo(myVideo, stream);
 
   peer.on('call', function(call) {
-    console.log(call);
       call.answer(stream);
       const video = document.createElement("video");
       const input = document.createElement("h1");
@@ -34,14 +33,20 @@ navigator.mediaDevices.getUserMedia({
       video.append(input);
       call.on('stream', function(remoteStream) {
         addVideo(video, remoteStream);
-        currentPeer = call.peerConnection;
+        currentPeer.push(call.peerConnection);
       });
+      call.on('close', () => {
+        console.log("close called");
+        video.remove()
+      })
   });
+
+  // peers[peer.id] = call
 
   socket.emit('new-user', name)
 
   socket.on('participants', users => {
-    userList = users;
+    userList = users
     addParticipants(users);
   })
 
@@ -52,9 +57,29 @@ navigator.mediaDevices.getUserMedia({
   })
 
 })
+//
+// socket.on('user-disconnected', userId => {
+//   if (peers[userId]) peers[userId].close()
+//   const p = peers.filter(x => )
+// })
 
-socket.on('user-disconnected', userId => {
-  if (peers[userId]) peers[userId].close()
+socket.on('user-disconnected', (userId) => {
+  setTimeout(() => {
+    console.log(userId + " left");
+    if (peers[userId])
+      peers[userId].close()
+
+    var videos = document.querySelectorAll('#video-grid video');
+      for(var i=0; i<videos.length; i++) {
+        const x = videos[i].querySelector("h1").innerHTML;
+        if(x == userId){
+          videos[i].remove();
+        }else{
+          adjustVideo(videos[i]);
+        }
+      }
+
+  }, 2000)
 })
 
 socket.on('redirect', function(destination) {
@@ -66,7 +91,6 @@ peer.on("open",(userId)=>{
 })
 
 function connectToNewUser(userId, stream) {
-    console.log("called1");
     const call = peer.call(userId, stream);
 
       const video = document.createElement("video");
@@ -74,11 +98,12 @@ function connectToNewUser(userId, stream) {
         input.innerHTML = userId;
         video.append(input);
       call.on('stream', function(remoteStream) {
-        addVideo(video, remoteStream, peer.id);
-        currentPeer = call.peerConnection;
+        addVideo(video, remoteStream);
+        currentPeer.push(call.peerConnection);
       });
 
       call.on('close', () => {
+        console.log("close called");
         video.remove()
       })
 
@@ -126,6 +151,7 @@ const adjustVideo = (video) => {
 
 //remove video
 const removeVideo = (video, stream) => {
+  console.log("hdsj");
   video.remove();
 }
 
@@ -165,9 +191,10 @@ document.querySelector(".closeCam").onclick = () => {
 
 // end button functionality
 document.querySelector(".end").onclick = () => {
-  removeVideo(myVideo,myStream);
-  adjustVideo(myVideo);
-  socket.disconnect();
+  // removeVideo(myVideo,myStream);
+  //adjustVideo(myVideo);
+  // socket.disconnect();
+  socket.emit("diconnect");
 }
 
 //raiseHand
@@ -206,20 +233,6 @@ document.querySelector(".raiseHand").onclick = () => {
   }
 }
 
-function raisedHand(userId, stream) {
-    const call = peer.call(userId, stream);
-    const video = document.createElement("video");
-    call.on('stream', function(remoteStream) {
-      addVideo(video, remoteStream);
-      currentPeer = call.peerConnection;
-    });
-    call.on('close', () => {
-      video.remove()
-    })
-
-    peers[userId] = call
-}
-
 // share button functionality
 document.querySelector(".shareBtn").onclick = () => {
   document.querySelector(".invite").style.display = "block";
@@ -251,12 +264,17 @@ document.querySelector(".closeShare").onclick = () => {
 }
 
 //share screen
+
 document.querySelector(".shareScreen").onclick = () => {
+  console.log("screenshare called");
   document.querySelector(".screenShare").style.display = "block";
   document.querySelector(".noShare").onclick = () => {
     document.querySelector(".screenShare").style.display = "none";
   }
-  document.querySelector(".yesShare").onclick = () => {
+  document.querySelector('.yesShare').onclick = () => {
+
+    console.log("sdbnj");
+
     navigator.mediaDevices.getDisplayMedia({
       video: {
         cursor: 'always'
@@ -266,25 +284,37 @@ document.querySelector(".shareScreen").onclick = () => {
         noiseSuppression: true
       }
     }).then(stream => {
+      myVideo.srcObject = stream;
       const videoTrack = stream.getVideoTracks()[0];
       videoTrack.onended = () => {
         stopScreenShare();
       };
 
-      const sender = currentPeer.getSenders().find(s => s.track.kind === videoTrack.kind);
+      for(var i=0; i<currentPeer.length; i++){
+        const sender = currentPeer[i].getSenders().find(s => {
+            return videoTrack.kind === s.track.kind
+        })
+        sender.replaceTrack(videoTrack)
+      }
 
-      sender.replaceTrack(videoTrack);
     }).catch(err => {
       console.log('Unable to get display media ' + err);
     });
+
     document.querySelector(".screenShare").style.display = "none";
   }
 }
 
 const stopScreenShare = () => {
+    myVideo.srcObject = myStream;
     const videoTrack = myStream.getVideoTracks()[0];
-    const sender = currentPeer.getSenders().find(s => s.track.kind === videoTrack.kind);
-    sender.replaceTrack(videoTrack);
+
+    for(var i=0; i<currentPeer.length; i++){
+      const sender = currentPeer[i].getSenders().find(s => {
+        return s.track.kind === videoTrack.kind
+      })
+      sender.replaceTrack(videoTrack);
+    }
   }
 
 //participantsList
