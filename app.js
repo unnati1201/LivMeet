@@ -56,23 +56,39 @@ app.get("/:id", (req,res)=>{
   res.render("videocall", { id : id });
 })
 
-const users = {}
+const users = {};
 
 io.on('connection', (socket) => {
+
   socket.on('new-user', name => {
     users[socket.id] = name
   })
+
   socket.on('join-room', (id,userId)=>{
     if( socket.client.conn.server.clientsCount > 9){
       socket.emit("redirect","/meetingFull");
     }else{
       socket.join(id);
+
+      var userList = [];
+
+      for(let [key, value] of io.sockets.adapter.rooms){
+        if(key == id){
+          for (const k of value) {
+            var obj = {
+              userId : k,
+              username: users[k]
+            }
+            userList.push(obj);
+          }
+        }
+      }
+
       //user-connected
       socket.broadcast.to(id).emit('user-connected', userId)
 
       //participants
-      socket.emit("participants", users);
-      socket.broadcast.to(id).emit("participants", users);
+      io.sockets.in(id).emit("participants", userList);
 
       //hand-raise
       socket.on("hand-raise", userId => {
@@ -87,7 +103,7 @@ io.on('connection', (socket) => {
         socket.broadcast.emit("chat-message",{ message: message, name: users[socket.id]});
       })
 
-      //speech detecte
+      //speech detect
       socket.on("voice-detected", userId => {
         socket.broadcast.emit("voice-received",userId);
       })
@@ -95,10 +111,25 @@ io.on('connection', (socket) => {
         socket.broadcast.emit("voice-notReceived",userId);
       })
 
+      //breakout-room
+      socket.on("join-breakout-room", (data) => {
+        io.to(data.userId).emit("breakout-room-accept", data.id);
+      })
+
+      //breakout-room-destroy
+      socket.on("rejoin-main-room", data => {
+        console.log(id);
+        var newId = "room1?" + id;
+        io.to(newId).emit('rejoin-main-room-accept', id);
+        socket.broadcast.to(newId).emit('rejoin-main-room-accept', id);
+      })
+
       //user-disconnected
       socket.on('disconnect', () => {
         socket.leave(id);
+        userList = userList.filter((item) => item.userId !== socket.id);
         delete users[socket.id]
+        io.sockets.in(id).emit("participants", userList);
         socket.broadcast.to(id).emit('user-disconnected', userId);
       })
     }

@@ -167,3 +167,7 @@ nav .btn:hover {
   float: right;
   cursor: pointer;
 }
+
+label {
+  padding-right: 12px;
+}

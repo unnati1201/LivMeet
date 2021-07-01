@@ -14,8 +14,17 @@ myVideo.muted = true;
 let myStream;
 const peers = {}
 var currentPeer = [];
-var userList;
-const name = prompt("Enter your name");;
+var name;
+
+requiredFunction();
+function requiredFunction() {
+  userName = prompt('Enter your name');
+  if (userName == "" || userName == null) {
+    requiredFunction();
+  }
+  name = userName;
+}
+
 
 navigator.mediaDevices.getUserMedia({
   video: true,
@@ -41,27 +50,26 @@ navigator.mediaDevices.getUserMedia({
       })
   });
 
-  // peers[peer.id] = call
-
   socket.emit('new-user', name)
 
   socket.on('participants', users => {
-    userList = users
-    addParticipants(users);
+    var username = [], userList = [];
+    for(var user of users){
+      userList.push(user.userId);
+      username.push(user.username)
+    }
+    addParticipants(username);
+    addUsers(username,userList);
   })
 
   socket.on('user-connected', userId => {
+    console.log("New user connected");
     setTimeout(() => {
       connectToNewUser(userId, stream)
     }, 1000)
   })
 
 })
-//
-// socket.on('user-disconnected', userId => {
-//   if (peers[userId]) peers[userId].close()
-//   const p = peers.filter(x => )
-// })
 
 socket.on('user-disconnected', (userId) => {
   setTimeout(() => {
@@ -191,9 +199,6 @@ document.querySelector(".closeCam").onclick = () => {
 
 // end button functionality
 document.querySelector(".end").onclick = () => {
-  // removeVideo(myVideo,myStream);
-  //adjustVideo(myVideo);
-  // socket.disconnect();
   socket.emit("diconnect");
 }
 
@@ -361,7 +366,7 @@ document.querySelector(".chat-form").addEventListener("submit", e => {
   e.preventDefault();
   const message = messageInput.value;
   if(message != ''){
-    socket.emit("send-chat-message", message)
+    socket.broadcast.to(id).emit("send-chat-message", message)
     messageInput.value = '';
     addMessage(message, "You")
   }

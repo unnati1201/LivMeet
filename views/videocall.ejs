@@ -5,6 +5,8 @@
   <meta charset="utf-8">
   <!-- CSS only -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.2"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
@@ -18,6 +20,7 @@
 </head>
 
 <body onload="deleteAllCookies()">
+
     <div class="screenShareDiv" style="display: none"></div>
 
     <div id="video-grid" class=""></div>
@@ -81,6 +84,21 @@
     </div>
   </div>
 
+  <!-- breakout room -->
+
+  <div class="card breakout-element message-container" style="width: 20rem; display: none">
+    <div class="card-header">
+      <h5 class="card-title" style="display: inline">Participants List</h5>
+      <span class="material-icons closeBRList closeList">close</span>
+    </div>
+    <div class="card-body">
+      <div class="users-content chat-messages"></div>
+      <br>
+      <button type="submit" name="sendMessage" class="btn btn-primary boFinalBtn">Done</button>
+      <button type="submit" name="" class="btn btn-primary desolveBOBtn" style="display: none">Done</button>
+    </div>
+  </div>
+
 
   <nav class="fixed-bottom main-buttons">
 
@@ -111,10 +129,12 @@
         <a type="button" class="participants">Participants</a>
         <a type="button" class="chatBtn">Chat</a>
         <a type="button" class="shareBtn">Share Link</a>
+        <a type="button" class="boRoomBtn">Breakout Rooms</a>
       </div>
     </div>
 
   </nav>
+
   <script type="text/javascript">
   function deleteAllCookies() {
     console.log("fhgbh");
@@ -129,6 +149,7 @@
 }
   </script>
   <script type="text/javascript" src="script.js"></script>
+  <script type="text/javascript" src="breakoutRooms.js"></script>
   <script type="text/javascript" src="speechDetect.js"></script>
 </body>
 
