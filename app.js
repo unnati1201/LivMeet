@@ -100,7 +100,7 @@ io.on('connection', (socket) => {
 
       //chat
       socket.on("send-chat-message", message => {
-        socket.broadcast.emit("chat-message",{ message: message, name: users[socket.id]});
+        io.sockets.in(id).emit("chat-message",{ message: message, name: users[socket.id]});
       })
 
       //speech detect
@@ -118,10 +118,18 @@ io.on('connection', (socket) => {
 
       //breakout-room-destroy
       socket.on("rejoin-main-room", data => {
-        console.log(id);
-        var newId = "room1?" + id;
-        io.to(newId).emit('rejoin-main-room-accept', id);
-        socket.broadcast.to(newId).emit('rejoin-main-room-accept', id);
+        for(var i=0; i<data.room1.length; i++){
+          io.to(data.id + "?room=1").emit('rejoin-main-room-accept', id);
+        }
+        for(var i=0; i<data.room2.length; i++){
+          io.to(data.id + "?room=2").emit('rejoin-main-room-accept', id);
+        }
+        for(var i=0; i<data.room3.length; i++){
+          io.to(data.id + "?room=3").emit('rejoin-main-room-accept', id);
+        }
+        for(var i=0; i<data.room4.length; i++){
+          io.to(data.id + "?room=4").emit('rejoin-main-room-accept', id);
+        }
       })
 
       //user-disconnected

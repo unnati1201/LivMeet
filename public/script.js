@@ -366,9 +366,9 @@ document.querySelector(".chat-form").addEventListener("submit", e => {
   e.preventDefault();
   const message = messageInput.value;
   if(message != ''){
-    socket.broadcast.to(id).emit("send-chat-message", message)
+    console.log(id);
+    socket.emit("send-chat-message", message)
     messageInput.value = '';
-    addMessage(message, "You")
   }
 })
 

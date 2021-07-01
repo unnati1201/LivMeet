@@ -36,7 +36,7 @@ document.querySelector(".boFinalBtn").onclick = () => {
 
   for(var i=0; i<room1.length; i++){
     var data = {
-      id: "room1?" + id,
+      id: id + "?room=1",
       userId: room1[i]
     }
     socket.emit("join-breakout-room", (data));
@@ -44,7 +44,7 @@ document.querySelector(".boFinalBtn").onclick = () => {
 
   for(var i=0; i<room2.length; i++){
     var data = {
-      id: "room2?" + id,
+      id: id + "?room=2",
       userId: room2[i]
     }
     socket.emit("join-breakout-room", (data));
@@ -52,7 +52,7 @@ document.querySelector(".boFinalBtn").onclick = () => {
 
   for(var i=0; i<room3.length; i++){
     var data = {
-      id: "room1?" + id,
+      id: id + "?room=3",
       userId: room3[i]
     }
     socket.emit("join-breakout-room", (data));
@@ -60,13 +60,13 @@ document.querySelector(".boFinalBtn").onclick = () => {
 
   for(var i=0; i<room4.length; i++){
     var data = {
-      id: "room4?" + id,
+      id: id + "?room=4",
       userId: room4[i]
     }
     socket.emit("join-breakout-room", (data));
   }
   document.querySelector(".breakout-element").style.display = "none";
-  document.querySelector(".desolveBOBtn").style.display = "block";
+  document.querySelector(".desolveBOBtn").style.display = "inline-block";
 }
 
 document.querySelector(".desolveBOBtn").onclick = () => {

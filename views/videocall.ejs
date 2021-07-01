@@ -12,14 +12,19 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
   <link rel="stylesheet" type="text/css" href="/css/styles.css" />
   <script>
-    const id = "<%= id %>" ;
+    const url = "<%= id %>" ;
+    const room = new URLSearchParams(document.location.search.substring(1)).get("room");
+    var id = url;
+    if(room == '1' || room == '2' || room == '3' || room == '4'){
+      id = url + "?" + "room=" + room;
+    }
   </script>
   <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <title>Microsoft Teams Clone</title>
 </head>
 
-<body onload="deleteAllCookies()">
+<body>
 
     <div class="screenShareDiv" style="display: none"></div>
 
@@ -94,8 +99,8 @@
     <div class="card-body">
       <div class="users-content chat-messages"></div>
       <br>
-      <button type="submit" name="sendMessage" class="btn btn-primary boFinalBtn">Done</button>
-      <button type="submit" name="" class="btn btn-primary desolveBOBtn" style="display: none">Done</button>
+      <button type="submit" name="sendMessage" class="btn btn-primary boFinalBtn" style="display: inline-block">Distribute Users</button>
+      <button type="submit" name="" class="btn btn-primary desolveBOBtn" style="display: none">Reconnect Users</button>
     </div>
   </div>
 
@@ -135,19 +140,6 @@
 
   </nav>
 
-  <script type="text/javascript">
-  function deleteAllCookies() {
-    console.log("fhgbh");
-  var cookies = document.cookie.split(";");
-
-  for (var i = 0; i < cookies.length; i++) {
-      var cookie = cookies[i];
-      var eqPos = cookie.indexOf("=");
-      var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-  }
-}
-  </script>
   <script type="text/javascript" src="script.js"></script>
   <script type="text/javascript" src="breakoutRooms.js"></script>
   <script type="text/javascript" src="speechDetect.js"></script>
