@@ -116,20 +116,14 @@ io.on('connection', (socket) => {
         io.to(data.userId).emit("breakout-room-accept", data.id);
       })
 
+      //breakout-room annoucenment
+      socket.on("send-message-to-BoRooms", (message) => {
+        io.to(id + "?room=1").to(id + "?room=2").to(id + "?room=3").to(id + "?room=4").emit("recieve-annoucement", message);
+      })
+
       //breakout-room-destroy
       socket.on("rejoin-main-room", data => {
-        for(var i=0; i<data.room1.length; i++){
-          io.to(data.id + "?room=1").emit('rejoin-main-room-accept', id);
-        }
-        for(var i=0; i<data.room2.length; i++){
-          io.to(data.id + "?room=2").emit('rejoin-main-room-accept', id);
-        }
-        for(var i=0; i<data.room3.length; i++){
-          io.to(data.id + "?room=3").emit('rejoin-main-room-accept', id);
-        }
-        for(var i=0; i<data.room4.length; i++){
-          io.to(data.id + "?room=4").emit('rejoin-main-room-accept', id);
-        }
+        io.to(id + "?room=1").to(id + "?room=2").to(id + "?room=3").to(id + "?room=4").emit('rejoin-main-room-accept', id);
       })
 
       //user-disconnected

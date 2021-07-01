@@ -111,7 +111,6 @@ function connectToNewUser(userId, stream) {
       });
 
       call.on('close', () => {
-        console.log("close called");
         video.remove()
       })
 
@@ -368,7 +367,7 @@ document.querySelector(".chat-form").addEventListener("submit", e => {
   if(message != ''){
     console.log(id);
     socket.emit("send-chat-message", message)
-    messageInput.value = '';
+    messageInput.value = "";
   }
 })
 

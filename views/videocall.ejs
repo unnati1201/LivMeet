@@ -91,7 +91,7 @@
 
   <!-- breakout room -->
 
-  <div class="card breakout-element message-container" style="width: 20rem; display: none">
+  <div class="card breakout-element message-container" style="width: 22rem; display: none">
     <div class="card-header">
       <h5 class="card-title" style="display: inline">Participants List</h5>
       <span class="material-icons closeBRList closeList">close</span>
@@ -99,8 +99,26 @@
     <div class="card-body">
       <div class="users-content chat-messages"></div>
       <br>
-      <button type="submit" name="sendMessage" class="btn btn-primary boFinalBtn" style="display: inline-block">Distribute Users</button>
-      <button type="submit" name="" class="btn btn-primary desolveBOBtn" style="display: none">Reconnect Users</button>
+      <div style="display:flex">
+        <button type="submit" name="sendMessage" class="btn btn-primary btn-sm boFinalBtn" style="display: inline-block; margin: 3px">Assign</button>
+        <button type="submit" name="" class="btn btn-primary btn-sm desolveBOBtn" style="display: none; margin: 3px">Close Rooms</button>
+        <button type="submit" name="" class="btn btn-primary btn-sm annoucementBtn" style="display: none; margin: 3px">Make Annoucement</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card annoucement-container" style="width: 20rem; display: none">
+    <div class="card-header">
+      <h5 class="card-title" style="display: inline">Annoucement</h5>
+      <span class="material-icons closeAnnoucemntBox closeList">close</span>
+    </div>
+    <div class="card-body">
+      <form class="aform" method="post">
+        <div class="input-group mb-3">
+          <input type="text" name="" value="" class="form-control annoucementInput" placeholder="Annoucement">
+          <button class="input-group-text annoucementSend" id="basic-addon1" type="submit">Send</button>
+        </div>
+      </form>
     </div>
   </div>
 

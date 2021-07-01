@@ -67,8 +67,10 @@ document.querySelector(".boFinalBtn").onclick = () => {
   }
   document.querySelector(".breakout-element").style.display = "none";
   document.querySelector(".desolveBOBtn").style.display = "inline-block";
+  document.querySelector(".annoucementBtn").style.display = "inline-block";
 }
 
+//destroy breakout room
 document.querySelector(".desolveBOBtn").onclick = () => {
   var data = {
     room1: room1,
@@ -78,6 +80,26 @@ document.querySelector(".desolveBOBtn").onclick = () => {
     id: id
   }
   socket.emit("rejoin-main-room", (data));
+  document.querySelector(".desolveBOBtn").style.display = "none";
+  document.querySelector(".annoucementBtn").style.display = "none";
+}
+
+//make Annoucement
+document.querySelector(".annoucementBtn").onclick = () => {
+  document.querySelector(".breakout-element").style.display = "none";
+  document.querySelector(".annoucement-container").style.display = "block";
+  document.querySelector(".aform").addEventListener("submit", e => {
+    e.preventDefault();
+    var message = document.querySelector(".annoucementInput").value;
+    if(message != ""){
+      socket.emit("send-message-to-BoRooms", (message));
+      document.querySelector(".annoucementInput").value = "";
+    }
+  })
+}
+
+document.querySelector(".closeAnnoucemntBox").onclick = () => {
+  document.querySelector(".annoucement-container").style.display = "none";
 }
 
 function addUsers(username, users){
@@ -164,6 +186,10 @@ socket.on("breakout-room-accept", (id) => {
   if(confirmation){
     location.replace("/" + id);
   }
+})
+
+socket.on("recieve-annoucement", message => {
+  addMessage(message, "Organizer");
 })
 
 socket.on("rejoin-main-room-accept", (id) => {
