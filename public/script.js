@@ -64,6 +64,7 @@ navigator.mediaDevices.getUserMedia({
 
   socket.on('user-connected', userId => {
     console.log("New user connected");
+
     setTimeout(() => {
       connectToNewUser(userId, stream)
     }, 1000)
@@ -370,6 +371,27 @@ document.querySelector(".chat-form").addEventListener("submit", e => {
     messageInput.value = "";
   }
 })
+
+document.querySelector(".addEmoji").onclick = () => {
+  var div = document.querySelector(".emoji-card").style.display;
+  if(div == "none"){
+    document.querySelector(".emoji-card").style.display = "block";
+  }else{
+    document.querySelector(".emoji-card").style.display = "none";
+  }
+
+}
+
+var lis = document.querySelectorAll('.emoji span');
+lis.forEach(function(el) {
+  el.addEventListener('click', onClick, false);
+})
+
+function onClick(e) {
+  var li = e.currentTarget;
+  messageInput.value += li.innerHTML;
+}
+
 
 function addMessage(message, name) {
   const messageElement = document.createElement("div")

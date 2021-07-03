@@ -172,7 +172,21 @@ label {
   padding: 0 20px;
 }
 
-/* breakout room */
+/* Emoji */
+.emoji-card{
+  background-color: #fff;
+  width: 85%;
+  float: right;
+  border: 1px solid grey;
+  border-radius: 2%;
+  margin: 40px;
+  height: 6rem;
+  overflow-y: auto;
+}
+
+.emojiBtn {
+  cursor: pointer;
+}
 
 /* Annoucement */
 .annoucement-container {

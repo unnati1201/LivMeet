@@ -9,6 +9,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 const { PeerServer } = require('peer');
+var multer = require('multer');
 
 const peerServer = PeerServer({
   debug: true,
