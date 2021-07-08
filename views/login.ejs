@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/css/login.css" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>LivMeet</title>
+  </head>
+  <body>
+    <div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+    <a href="#" class="signintag"><h2 class="active"> Sign In </h2></a>
+    <a href="#" class="signUptag"><h2 class="inactive underlineHover">Sign Up </h2></a>
+
+    <!-- Login Form -->
+    <form class="loginForm" action="/login" method="POST" >
+      <input type="text" id="login" class="fadeIn second" name="username" placeholder="username">
+      <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
+      <input type="submit" class="fadeIn fourth" value="Log In">
+    </form>
+
+    <!-- Sign Up Form -->
+    <form class="signUpForm" action="/signup" method="POST" style="display : none" >
+      <input type="text" id="name" class="fadeIn second" name="name" placeholder="name">
+      <input type="text" id="signup" class="fadeIn second" name="username" placeholder="username">
+      <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
+      <input type="submit" class="fadeIn fourth" value="Sign Up">
+    </form>
+
+    <!-- Remind Passowrd -->
+    <div id="formFooter">
+
+    </div>
+
+  </div>
+</div>
+
+<script type="text/javascript">
+  document.querySelector(".signUptag").onclick = () => {
+    document.querySelector(".signUptag h2").className = "active";
+    document.querySelector(".signintag h2").className = "inactive underlineHover signintag";
+    document.querySelector(".loginForm").style.display = "none";
+    document.querySelector(".signUpForm").style.display = "block";
+  }
+
+  document.querySelector(".signintag").onclick = () => {
+    document.querySelector(".signintag h2").className = "active";
+    document.querySelector(".signUptag h2").className = "inactive underlineHover";
+    document.querySelector(".loginForm").style.display = "block";
+    document.querySelector(".signUpForm").style.display = "none";
+  }
+</script>
+  </body>
+</html>

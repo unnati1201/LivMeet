@@ -18,7 +18,7 @@ var name;
 
 requiredFunction();
 function requiredFunction() {
-  userName = prompt('Enter your name');
+  userName = prompt('Enter your username');
   if (userName == "" || userName == null) {
     requiredFunction();
   }
@@ -45,7 +45,6 @@ navigator.mediaDevices.getUserMedia({
         currentPeer.push(call.peerConnection);
       });
       call.on('close', () => {
-        console.log("close called");
         video.remove()
       })
   });
@@ -159,7 +158,6 @@ const adjustVideo = (video) => {
 
 //remove video
 const removeVideo = (video, stream) => {
-  console.log("hdsj");
   video.remove();
 }
 
@@ -271,14 +269,11 @@ document.querySelector(".closeShare").onclick = () => {
 //share screen
 
 document.querySelector(".shareScreen").onclick = () => {
-  console.log("screenshare called");
   document.querySelector(".screenShare").style.display = "block";
   document.querySelector(".noShare").onclick = () => {
     document.querySelector(".screenShare").style.display = "none";
   }
   document.querySelector('.yesShare').onclick = () => {
-
-    console.log("sdbnj");
 
     navigator.mediaDevices.getDisplayMedia({
       video: {
@@ -299,7 +294,16 @@ document.querySelector(".shareScreen").onclick = () => {
         const sender = currentPeer[i].getSenders().find(s => {
             return videoTrack.kind === s.track.kind
         })
+
         sender.replaceTrack(videoTrack)
+        console.log(videoTrack);
+
+        var videos = document.querySelectorAll("#remote-video");
+        for(var i=0; i<videos.length; i++){
+          if(videos[i].querySelector("h1").innerHTML == videoTrack.id){
+            videos[i].style.display = "none";
+          }
+        }
       }
 
     }).catch(err => {
@@ -366,7 +370,6 @@ document.querySelector(".chat-form").addEventListener("submit", e => {
   e.preventDefault();
   const message = messageInput.value;
   if(message != ''){
-    console.log(id);
     socket.emit("send-chat-message", message)
     messageInput.value = "";
   }

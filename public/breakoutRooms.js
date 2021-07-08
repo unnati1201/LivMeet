@@ -188,7 +188,7 @@ socket.on("breakout-room-accept", (id) => {
   }
 })
 
-socket.on("recieve-annoucement", message => {
+socket.on("receive-annoucement", message => {
   addMessage(message, "Organizer");
 })
 

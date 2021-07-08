@@ -1,0 +1,264 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height:  100%;
+}
+
+body {
+  display: grid;
+  background: linear-gradient(to right,#26264F 0%,#BC99FA 100%);
+  place-items: center;
+}
+
+html {
+  font-family:  Arial, Helvetica, sans-serif;
+  font-size: 10px;
+}
+
+#chat-container {
+  display: grid;
+  grid :
+    'search-container chat-title' 71px
+    'conversation-list chat-message-list' 1fr
+    'new-message-container chat-form' 78px
+    / 275px 1fr;
+  min-width: 800px;
+  max-width: 1000px;
+  min-width: 800px;
+  height: 95vh;
+  background: #fff;
+  border-radius: 10px;
+}
+
+#search-container,
+#conversation-list,
+#new-message-container {
+  background: #C6B4CE;
+}
+
+#search-container {
+  grid-area: search-container;
+  border-radius: 10px 0 0 0;
+  box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.75);
+  z-index: 1;
+  display: grid;
+  align-items: center;
+  padding: 0 20px;
+}
+
+#search-container input {
+  color: grey;
+  outline: none;
+  font-weight: bold;
+  border-radius: 2px;
+  height: 30px;
+  border: 0;
+  padding-left: 28px;
+  padding-right: 6px;
+  font-size: 1.4rem;
+  background: rgba(255, 255, 255, 0.4);
+  background-position: 15px center;
+  background-size: 20px 20px;
+}
+
+#search-container input::placeholder {
+  color: #fff;
+}
+
+#conversation-list {
+  grid-area: conversation-list;
+  overflow: scroll;
+}
+
+.conversation {
+  display: grid;
+  grid-template-columns:1fr max-content;
+  grid-gap: 10px;
+  color: #ddd;
+  font-size: 1.3rem;
+  border-bottom: 1px solid #4A4A97;
+  padding: 20px 20px 20px 15px;
+}
+
+.conversation.active,
+.conversation:hover {
+  background: #4A4A97;
+}
+
+.conversation:hover {
+  cursor: pointer;
+}
+
+.title-text {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+  color: #eee;
+}
+
+.created-date {
+  color: #ddd;
+  font-size: 1rem;
+}
+
+.conversation-message {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+#new-message-container {
+  display: grid;
+  grid: 40px / 40px;
+  align-content: center;
+  grid-area: new-message-container;
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 0 0 0 10px;
+  padding: 0 15px;
+}
+
+#new-message-container a{
+  display: grid;
+  place-content: center center;
+  background: #eee;
+  border-radius: 100%;
+  color: #4A4A97;
+  text-decoration: none;
+  font-size: 3.6rem;
+  padding-bottom: 5px;
+}
+
+#chat-title,
+#chat-form {
+  background: #eee;
+}
+
+#chat-title {
+  display: grid;
+  grid: 36px/1fr 36px;
+  align-content: center;
+  align-items: center;
+  padding: 0 20px;
+  grid-area: chat-title;
+  color: #4A4A97;
+  font-weight: bold;
+  font-size: 2.0rem;
+  border-radius: 0 10px 0 0;
+  box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0,75);
+}
+
+#chat-form {
+  display: grid;
+  padding-left: 42px;
+  padding-right: 22px;
+  align-content: center;
+  align-items: center;
+  grid-gap: 15px;
+  grid-area: chat-form ;
+  border-radius: 0 0 10px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+#chat-message-list {
+  grid-area: chat-message-list;
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 0 20px;
+  overflow-y: scroll;
+}
+
+.message-row {
+  display: grid;
+  grid-template-columns: 70%;
+  margin-bottom: 20px;
+}
+
+.message-text {
+  padding: 9px 14px;
+  font-size: 1.6rem;
+  margin-bottom: 5px;
+}
+
+.message-time {
+  font-size: 1.3rem;
+  color: #777;
+}
+
+.you-message .message-text {
+  background: #AA80F9;
+  color: #eee;
+  border: 1px solid #AA80F9;
+  border-radius: 14px 14px 0 14px;
+}
+
+.you-message{
+  justify-content: end;
+  justify-items: end;
+}
+
+.other-message .message-text {
+  background: #eee;
+  color: #111;
+  border: 1px solid #eee;
+  border-radius: 14px 14px 14px 0;
+}
+
+.other-message{
+  justify-items: start;
+}
+
+#chat-form input {
+  outline: none;
+  padding: 15px;
+  border: 2px solid #ddd;
+  color: #330;
+  border-radius: 6px;
+  font-size: 1.4rem;
+  margin: 10px;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.invite {
+  width: 40%;
+  position: absolute;
+  display: none;
+  left: 50%;
+  bottom: 50%;
+  transform: translate(-50%, 10%);
+  text-align: center;
+  font-size: 1.7rem;
+}
+
+.invite input {
+  width: 100%;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  font-size: 1.4rem;
+}
+.invite button {
+  font-size: 1.4rem;
+}
+
+.invite .submitGroup {
+  width: 100%;
+  margin-bottom: 10px;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  font-size: 1.4rem;
+  background-color: #4A4A97;
+  color: #eee;
+}
+
+.invite span, #startMeeting {
+  float: right;
+  cursor: pointer;
+}
