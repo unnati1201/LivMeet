@@ -15,7 +15,7 @@ document.querySelector(".boFinalBtn").onclick = () => {
   var contentEle = document.querySelector('.users-content');
   var ids = contentEle.querySelectorAll('h1')
   var content = contentEle.querySelectorAll('form')
-  console.log(content);
+
   for(var i=0; i<content.length; i++){
     const n = 'roomNum' + i;
     const choice1 = content[i].querySelector("label:nth-child(1) input");
@@ -181,7 +181,7 @@ function addUsers(username, users){
 }
 
 socket.on("breakout-room-accept", (id) => {
-  console.log(socket.id);
+
   var confirmation = window.confirm("Will you like to redirect to breakout room?");
   if(confirmation){
     location.replace("/" + id);
@@ -193,7 +193,7 @@ socket.on("receive-annoucement", message => {
 })
 
 socket.on("rejoin-main-room-accept", (id) => {
-  console.log("Clicked");
+
   var confirmation = window.confirm("Join back to Main Meeting");
   if(confirmation){
     location.replace("/" + id);

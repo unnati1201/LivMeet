@@ -1,6 +1,5 @@
 let socket = io("/chat");
 socket.on('send-chat-meeting', message => {
-  console.log(message.message);
   if(message.message.username == currentUsername){
 
     var newMessage = {
@@ -10,7 +9,7 @@ socket.on('send-chat-meeting', message => {
       roomId: message.message.roomId,
       timestamp: message.message.timestamp
     }
-    // console.log("me");
+
     addMessage(newMessage);
   }else{
     var newMessage = {
@@ -20,7 +19,7 @@ socket.on('send-chat-meeting', message => {
       roomId: message.message.roomId,
       timestamp: message.message.timestamp
     }
-    // console.log("you");
+
     addMessage(newMessage);
   }
 });
@@ -33,7 +32,6 @@ h1Id.forEach(function(e) {
 
 function onClick(e) {
   var h1 = e.currentTarget.querySelector("h1").innerHTML;
-  console.log(h1);
 
   var y = document.querySelectorAll(".message-box");
   for(var i=0; i<y.length; i++){
@@ -49,7 +47,6 @@ function onClick(e) {
 
 //send messages
 socket.on('chat-message', data => {
-  console.log("bsjd");
   addMessage(data.message);
 })
 
@@ -58,8 +55,6 @@ document.querySelector(".chat-form").addEventListener("submit", e => {
   var messageInput = document.querySelector("#chat-form input");
   const message = messageInput.value;
   var name = document.querySelector("#chat-title #name").innerHTML;
-
-  console.log(message);
 
   var today = new Date();
   var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -77,16 +72,12 @@ document.querySelector(".chat-form").addEventListener("submit", e => {
       userId: userId
     }
 
-    console.log("send-chat-message");
     socket.emit("send-chat-message", newMessage)
-    console.log("send-chat-message done");
     messageInput.value = "";
   }
 })
 
 function addMessage(newMessage) {
-
-  console.log(newMessage);
 
   const messageRow = document.createElement("div");
   const messageTitle = document.createElement("div");
@@ -112,7 +103,6 @@ function addMessage(newMessage) {
   messageRow.append(messageTime);
 
   var divs = document.querySelectorAll(".message-box");
-  // console.log(divs);
 
   for(var i=0; i<divs.length; i++){
     if(divs[i].id == newMessage.roomId){
@@ -125,7 +115,6 @@ function addMessage(newMessage) {
 //--------------------MAKE GROUPS------------------------------------
 
 socket.on("new-group-done", (data) => {
-  console.log(data);
   var conversation = document.createElement("div");
   conversation.className = "conversation " + data.data.roomId;
 
@@ -148,11 +137,11 @@ socket.on("new-group-done", (data) => {
   document.querySelector(".invite").style.display = "none";
 
   h1Id = document.querySelectorAll('#conversation-list .conversation');
-  console.log(h1Id.length);
+
   h1Id.forEach(function(e) {
     e.addEventListener('click', onClick, false);
   })
-  console.log(h1Id);
+
 })
 
 document.querySelector("#new-message-container a").onclick = () => {
@@ -172,7 +161,6 @@ document.querySelector(".participants").onclick = () => {
   var participantElm = document.querySelector(".invite #username");
   const participant = participantElm.value;
   if(participant != ''){
-    console.log(participant);
     newGroupUsers.push(participant);
     document.querySelector(".invite #username").value = '';
   }
@@ -182,7 +170,6 @@ document.querySelector(".submitGroup").onclick = () => {
   var groupElm = document.querySelector(".invite #groupName");
   const group = groupElm.value;
   if(group != ''){
-    console.log(group);
     const data = {
       groupName: group,
       users: newGroupUsers

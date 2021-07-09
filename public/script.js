@@ -205,7 +205,6 @@ socket.on("person-raised-hand", userId => {
   var videos = document.querySelectorAll('#video-grid video');
   for(var i=0; i<videos.length; i++) {
     const x = videos[i].querySelector("h1").innerHTML;
-    console.log(x);
     if(x == userId){
       videos[i].style.border = "2px solid yellow"
     }
@@ -216,7 +215,6 @@ socket.on("person-down-hand", userId => {
   var videos = document.querySelectorAll('#video-grid video');
   for(var i=0; i<videos.length; i++) {
     const x = videos[i].querySelector("h1").innerHTML;
-    console.log(x);
     if(x == userId){
       videos[i].style.border = "none"
     }
@@ -295,8 +293,7 @@ document.querySelector(".shareScreen").onclick = () => {
             return videoTrack.kind === s.track.kind
         })
 
-        sender.replaceTrack(videoTrack)
-        console.log(videoTrack);
+        sender.replaceTrack(videoTrack);
 
         var videos = document.querySelectorAll("#remote-video");
         for(var i=0; i<videos.length; i++){

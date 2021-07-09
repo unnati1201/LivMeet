@@ -42,6 +42,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 mongoose.connect("mongodb+srv://adminUnnati:adminUnnati@cluster0.uyyhq.mongodb.net/livMeetDB", {useNewUrlParser: true,  useUnifiedTopology: true });
+// mongoose.connect("mongodb://localhost:27017/userDB", {useNewUrlParser: true,  useUnifiedTopology: true });
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
@@ -182,7 +183,6 @@ app.post("/joiningNewMeeting", (req,res) => {
 })
 
 app.post("/joiningMeeting", (req,res) => {
-  console.log(req.body.link);
   res.redirect("/" + req.body.link);
 })
 
@@ -225,12 +225,14 @@ io.of("/chat").on("connection", (socket) => {
           if(err){
             console.log(err);
           }else{
-            var newGroup = {
-              room
+            if(user != null){
+              var newGroup = {
+                room: room
+              }
+              room.save();
+              user.chatGroups.push(newGroup);
+              user.save();
             }
-            room.save();
-            user.chatGroups.push(newGroup);
-            user.save();
           }
         })
       }
@@ -238,7 +240,6 @@ io.of("/chat").on("connection", (socket) => {
         roomId: roomId,
         roomName: data.groupName
       }
-      // console.log(sendData);
       socket.broadcast.emit("new-group-done",{ data: sendData });
       socket.emit("new-group-done",{ data: sendData });
     })
@@ -257,8 +258,6 @@ io.of("/chat").on("connection", (socket) => {
     })
 
     socket.on("send-chat-message", message => {
-
-      console.log(message);
 
       const newMessage = new Message ({
         text: message.text,
@@ -288,7 +287,6 @@ io.of("/chat").on("connection", (socket) => {
         if(err){
           console.log(err);
         }else{
-          console.log(user);
           for(var i=0; i<user.chatGroups.length; i++){
 
             if(user.chatGroups[i].room[0].roomId == message.roomId){
@@ -296,22 +294,20 @@ io.of("/chat").on("connection", (socket) => {
               user.chatGroups[i].message.push(newMessage);
 
               user.chatGroups[i].room[0].users.forEach((connectedUser) => {
-                // console.log("users " + i + " : " + connectedUser);
 
                 User.findOne({username: connectedUser}, (err, foundUser)=>{
-                  // console.log("foundUser : " + foundUser);
                   if(err){
                     console.log(err);
                   }else{
-                    for(var i=0; i<foundUser.chatGroups.length; i++){
-                      console.log("length : " + foundUser.chatGroups.length);
-                      if(foundUser.chatGroups[i].room[0].roomId == message.roomId && foundUser._id != message.userId){
-                        console.log(message);
-                        foundUser.chatGroups[i].message.push(newOtherMessage);
-                        break;
+                    if(foundUser != null){
+                      for(var i=0; i<foundUser.chatGroups.length; i++){
+                        if(foundUser.chatGroups[i].room[0].roomId == message.roomId && foundUser._id != message.userId){
+                          foundUser.chatGroups[i].message.push(newOtherMessage);
+                          break;
+                        }
                       }
+                      foundUser.save();
                     }
-                    foundUser.save();
                   }
                 });
 
@@ -321,7 +317,6 @@ io.of("/chat").on("connection", (socket) => {
 
           }
           user.save();
-          // console.log("sjdj");
           socket.broadcast.emit("chat-message",{ message: messageToOthers });
           socket.emit("chat-message",{ message: message });
         }
@@ -378,13 +373,10 @@ io.of("/").on('connection', (socket) => {
         var time = today.getHours() + ":" + today.getMinutes();
         var dateTime = date+' '+time;
 
-        // console.log(dateTime);
-
         Room.findOne({roomId: id}, (err,thisroom) => {
           if(err){
             console.log(err);
           }else{
-            // console.log(thisroom);
 
             var messageClient = {
               text: message,
@@ -411,25 +403,22 @@ io.of("/").on('connection', (socket) => {
                 if(err){
                   console.log(err);
                 }else{
-                  if(user.username == users[socket.id]){
-                    for(var j=0; j<user.chatGroups.length; j++){
-                      // console.log(user.chatGroups[i]);
-                      if(user.chatGroups[j].room[0].roomId == id){
-                        // console.log(messageToMe);
-                        user.chatGroups[j].message.push(messageToMe);
-                        user.save();
-                        break;
+                  if(user != null){
+                    if(user.username == users[socket.id]){
+                      for(var j=0; j<user.chatGroups.length; j++){
+                        if(user.chatGroups[j].room[0].roomId == id){
+                          user.chatGroups[j].message.push(messageToMe);
+                          user.save();
+                          break;
+                        }
                       }
-                    }
-                  }else{
-                    console.log(user.chatGroups.length);
-                    for(var j=0; j<user.chatGroups.length; j++){
-                      // console.log(user.chatGroups[j]);
-                      if(user.chatGroups[j].room[0].roomId == id){
-                        // console.log(message);
-                        user.chatGroups[j].message.push(messageToOthers);
-                        user.save();
-                        break;
+                    }else{
+                      for(var j=0; j<user.chatGroups.length; j++){
+                        if(user.chatGroups[j].room[0].roomId == id){
+                          user.chatGroups[j].message.push(messageToOthers);
+                          user.save();
+                          break;
+                        }
                       }
                     }
                   }
