@@ -288,14 +288,14 @@ document.querySelector(".shareScreen").onclick = () => {
         stopScreenShare();
       };
 
-      console.log(currentPeer);
+
 
       for(var i=0; i<currentPeer.length; i++){
         const sender = currentPeer[i].getSenders().find(s => {
-          console.log("Peer2");
+
           return videoTrack.kind === s.track.kind;
         })
-        console.log("Peer4");
+
         sender.replaceTrack(videoTrack);
 
         var videos = document.querySelectorAll("#remote-video");
@@ -318,7 +318,7 @@ const stopScreenShare = () => {
     myVideo.srcObject = myStream;
     const videoTrack = myStream.getVideoTracks()[0];
 
-    console.log("Peer3");
+    
 
     for(var i=0; i<currentPeer.length; i++){
       const sender = currentPeer[i].getSenders().find(s => {
