@@ -398,32 +398,34 @@ io.of("/").on('connection', (socket) => {
               timestamp: dateTime
             }
 
-            for(var i=0; i<thisroom.users.length; i++){
-              User.findOne({username: thisroom.users[i]}, (err,user) => {
-                if(err){
-                  console.log(err);
-                }else{
-                  if(user != null){
-                    if(user.username == users[socket.id]){
-                      for(var j=0; j<user.chatGroups.length; j++){
-                        if(user.chatGroups[j].room[0].roomId == id){
-                          user.chatGroups[j].message.push(messageToMe);
-                          user.save();
-                          break;
+            if(thisroom != null){
+              for(var i=0; i<thisroom.users.length; i++){
+                User.findOne({username: thisroom.users[i]}, (err,user) => {
+                  if(err){
+                    console.log(err);
+                  }else{
+                    if(user != null){
+                      if(user.username == users[socket.id]){
+                        for(var j=0; j<user.chatGroups.length; j++){
+                          if(user.chatGroups[j].room[0].roomId == id){
+                            user.chatGroups[j].message.push(messageToMe);
+                            user.save();
+                            break;
+                          }
                         }
-                      }
-                    }else{
-                      for(var j=0; j<user.chatGroups.length; j++){
-                        if(user.chatGroups[j].room[0].roomId == id){
-                          user.chatGroups[j].message.push(messageToOthers);
-                          user.save();
-                          break;
+                      }else{
+                        for(var j=0; j<user.chatGroups.length; j++){
+                          if(user.chatGroups[j].room[0].roomId == id){
+                            user.chatGroups[j].message.push(messageToOthers);
+                            user.save();
+                            break;
+                          }
                         }
                       }
                     }
                   }
-                }
-              })
+                })
+              }
             }
             io.of('/chat').emit("send-chat-meeting", {message: messageClient});
           }
