@@ -288,17 +288,20 @@ document.querySelector(".shareScreen").onclick = () => {
         stopScreenShare();
       };
 
+      console.log(currentPeer);
+
       for(var i=0; i<currentPeer.length; i++){
         const sender = currentPeer[i].getSenders().find(s => {
-            return videoTrack.kind === s.track.kind
+          console.log("Peer2");
+          return videoTrack.kind === s.track.kind;
         })
-
+        console.log("Peer4");
         sender.replaceTrack(videoTrack);
 
         var videos = document.querySelectorAll("#remote-video");
-        for(var i=0; i<videos.length; i++){
-          if(videos[i].querySelector("h1").innerHTML == videoTrack.id){
-            videos[i].style.display = "none";
+        for(var j=0; j<videos.length; j++){
+          if(videos[j].querySelector("h1").innerHTML == videoTrack.id){
+            videos[j].style.display = "none";
           }
         }
       }
@@ -314,6 +317,8 @@ document.querySelector(".shareScreen").onclick = () => {
 const stopScreenShare = () => {
     myVideo.srcObject = myStream;
     const videoTrack = myStream.getVideoTracks()[0];
+
+    console.log("Peer3");
 
     for(var i=0; i<currentPeer.length; i++){
       const sender = currentPeer[i].getSenders().find(s => {
