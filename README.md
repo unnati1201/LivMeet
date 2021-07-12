@@ -4,12 +4,15 @@ LivMeet is a video-communication web application with a additional feature of gr
 
 To check this web app out, head over to : https://liv-meet.herokuapp.com/.
 
+**BEST COMPATIBLE WITH GOOGLE CHROME**
+
 Sample username and password for testing:
 </br>
 **Username:** admin1 , **Password:** qwerty
 </br>
 **Username:** admin2 , **Password:** qwerty
 </br>
+
 ## Objective
 
 The objective of this web app is to provide a platform for face-to-face communication from anywhere, anytime.
